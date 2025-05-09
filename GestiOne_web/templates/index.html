@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestiOne Web</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" type="image/png">
+</head>
+
+<body>
+    <div class="container">
+        <h1>GestiOne Web</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for category, message in messages %}
+            <li class="flash-{{ category }}">
+                {{ message }}
+                <span class="close-flash" onclick="this.parentElement.style.display='none';">&times;</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <section id="inventory">
+            <h2>Inventario</h2>
+            <div class="table-filters">
+                <input type="text" id="inventoryIdFilter" placeholder="Filtrar por ID" oninput="filterInventoryTable()">
+                <input type="text" id="inventoryNameFilter" placeholder="Filtrar por Nombre" oninput="filterInventoryTable()">
+                <input type="number" id="inventoryPriceMinFilter" placeholder="Precio Mínimo" oninput="filterInventoryTable()">
+                <input type="number" id="inventoryPriceMaxFilter" placeholder="Precio Máximo" oninput="filterInventoryTable()">
+                <input type="number" id="inventoryQuantityMinFilter" placeholder="Cantidad Mínima" oninput="filterInventoryTable()">
+                <input type="number" id="inventoryQuantityMaxFilter" placeholder="Cantidad Máxima" oninput="filterInventoryTable()">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr {% if product[3] | int <= min_stock_level %}class="low-stock"{% endif %}>
+                        <td>{{ product[0] }}</td>
+                        <td>{{ product[1] }}</td>
+                        <td>{{ product[2] }}</td>
+                        <td>{{ product[3] }}</td>
+                        <td>
+                            <button class="edit-btn" onclick="showEditModal('{{ product[0] }}', '{{ product[1] }}', '{{ product[2] }}')">
+                                <img src="{{ url_for('static', filename='assets/icons/edit.png') }}" alt="Editar">
+                            </button>
+                            <button class="restock-btn" onclick="showRestockModal('{{ product[0] }}', '{{ product[1] }}')">
+                                <img src="{{ url_for('static', filename='assets/icons/add.png') }}" alt="Restock">
+                            </button>
+                            <button class="delete-btn" onclick="confirmDelete('{{ product[0] }}')">
+                                <img src="{{ url_for('static', filename='assets/icons/delete.png') }}" alt="Eliminar">
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button class="add-product-btn" onclick="showAddModal()">Agregar Producto</button>
+        </section>
+
+        <section id="sales-history">
+            <h2>Historial de Ventas</h2>
+            <div class="table-filters">
+                <input type="text" id="salesIdFilter" placeholder="Filtrar por ID Venta" oninput="filterSalesTable()">
+                <input type="text" id="salesProductFilter" placeholder="Filtrar por Nombre Producto" oninput="filterSalesTable()">
+                <input type="date" id="salesDateFilter" placeholder="Filtrar por Fecha" oninput="filterSalesTable()">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Venta</th>
+                        <th>ID Producto</th>
+                        <th>Nombre Producto</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                    <tr>
+                        <td>{{ sale[0] }}</td>
+                        <td>{{ sale[1] }}</td>
+                        <td>{{ sale[2] }}</td>
+                        <td>{{ sale[3] }}</td>
+                        <td>{{ sale[4] }}</td>
+                        <td>{{ sale[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button class="register-sale-btn" onclick="showRegisterSaleModal()">Registrar Venta</button>
+        </section>
+
+        <section id="settings">
+            <h2>Ajustes</h2>
+            <button class="settings-btn" id="toggleSettings">Mostrar Ajustes</button>
+            <div id="settingsOptions" style="display: none;">
+                <div class="settings-option">
+                    <h3>Ajustar Nivel Mínimo de Stock</h3>
+                    <p>Nivel mínimo de stock actual: {{ min_stock_level }}</p>
+                    <form action="/set_min_stock_level" method="post">
+                        <label for="min_stock_level">Nuevo Nivel Mínimo:</label>
+                        <input type="number" id="min_stock_level" name="min_stock_level" value="{{ min_stock_level }}" required>
+                        <button type="submit" class="settings-btn">Guardar</button>
+                    </form>
+                </div>
+                <div class="settings-option">
+                    <h3>Resetear Datos</h3>
+                    <p>Elimina todos los productos y ventas.</p>
+                    <button class="reset-btn" onclick="confirmReset()">Resetear Datos</button>
+                </div>
+            </div>
+        </section>
+
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAddModal()">&times;</span>
+                <h2>Agregar Producto</h2>
+                <form action="/add_product" method="post">
+                    <label for="id_product">ID:</label>
+                    <input type="text" id="id_product" name="id_product" required>
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="price">Precio:</label>
+                    <input type="number" id="price" name="price" step="0.01" required>
+                    <label for="quantity">Cantidad:</label>
+                    <input type="number" id="quantity" name="quantity" required>
+                    <button type="submit" class="modal-btn">Guardar</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2>Editar Producto</h2>
+                <form id="editForm" method="post">
+                    <label for="edit_name">Nombre:</label>
+                    <input type="text" id="edit_name" name="name">
+                    <label for="edit_price">Precio:</label>
+                    <input type="number" id="edit_price" name="price" step="0.01">
+                    <input type="hidden" id="edit_id" name="id">
+                    <button type="submit" class="modal-btn">Guardar</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="restockModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeRestockModal()">&times;</span>
+                <h2>Restock Producto</h2>
+                <form id="restockForm" method="post">
+                    <p>Producto: <span id="restock_name"></span></p>
+                    <label for="restock_quantity">Cantidad a añadir:</label>
+                    <input type="number" id="restock_quantity" name="restock_quantity" required>
+                    <input type="hidden" id="restock_id" name="id">
+                    <button type="submit" class="modal-btn">Restock</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="registerSaleModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeRegisterSaleModal()">&times;</span>
+                <h2>Registrar Venta</h2>
+                <form action="/register_sale" method="post">
+                    {% for product in products %}
+                    <label for="{{ product[0] }}">{{ product[1] }} (Stock: {{ product[3] }})</label>
+                    <input type="number" id="{{ product[0] }}" name="{{ product[0] }}" min="0" max="{{ product[3] }}" value="0">
+                    {% endfor %}
+                    <button type="submit" class="modal-btn">Registrar Venta</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Añadir esta línea para cargar el JavaScript -->
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <script>
+            // Función para confirmar el reseteo de datos
+            function confirmReset() {
+                if (confirm("¿Estás seguro de que quieres resetear todos los datos? Esta acción no se puede deshacer.")) {
+                    window.location.href = "/reset_data?confirm=true";
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,337 @@
+/* General Styles */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #555;
+}
+
+h2 {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 20px;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* Buttons */
+button {
+    padding: 5px 8px; /* Reduced padding */
+    margin: 2px;      /* Reduced margin */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.85em; /* Slightly smaller font */
+    display: inline-flex; /* Use flexbox for icon alignment */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+}
+
+.add-product-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.add-product-btn:hover {
+    background-color: #45a049;
+}
+
+.edit-btn {
+    background-color: #008CBA;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #0077a3;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+.restock-btn {
+    background-color: #ff9800;
+    color: white;
+}
+
+.restock-btn:hover {
+    background-color: #f08c00;
+}
+
+.register-sale-btn {
+    background-color: #9c27b0;
+    color: white;
+}
+
+.register-sale-btn:hover {
+    background-color: #8e24aa;
+}
+
+.settings-btn {
+    background-color: #607d8b;
+    color: white;
+}
+
+.settings-btn:hover {
+    background-color: #546e7a;
+}
+
+.reset-btn {
+    background-color: #795548;
+    color: white;
+}
+
+.reset-btn:hover {
+    background-color: #6d4c41;
+}
+
+button img {
+    vertical-align: middle;
+    margin-right: 2px; /* Reduced spacing */
+    height: 16px;     /* Set icon size */
+    width: 16px;
+}
+
+/* Forms */
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Flash Messages */
+.flash-messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.flash-success {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.flash-error {
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.flash-warning {
+    background-color: #ff9800;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.flash-info {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-btn {
+    background-color: #555;
+    color: white;
+}
+
+.modal-btn:hover {
+    background-color: #333;
+}
+
+/* Low Stock */
+.low-stock {
+    background-color: #ffcccc;
+}
+
+/* Table Filters */
+.table-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.table-filters input {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+#toggleSettings {
+    background-color: #555; /* Or any other color you prefer */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px; /* Add some spacing */
+}
+
+#toggleSettings:hover {
+    background-color: #333;
+}
+
+/* Settings Section Styling */
+#settingsOptions {
+    margin-top: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.settings-option {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.settings-option:last-child {
+    border-bottom: none; /* Remove border from the last option */
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.settings-option h3 {
+    margin-top: 0;
+    color: #555;
+}
+
+/* Restyle the reset button */
+.reset-btn {
+    background-color: #795548;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.reset-btn:hover {
+    background-color: #6d4c41;
+}
+
+/* Flash Messages */
+.flash-messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 10px;
+    position: relative; /* Needed for absolute positioning of close button */
+}
+
+.flash-success,
+.flash-error,
+.flash-warning,
+.flash-info {
+    padding: 10px 25px; /* Increased padding to make room for close button */
+    border-radius: 5px;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.close-flash {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+}
+
+.close-flash:hover {
+    color: #ccc;
+}
