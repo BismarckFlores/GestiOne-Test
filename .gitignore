@@ -1,1 +1,15 @@
-GestiOne_cmd/src/__pycache__
+# Python cache
+__pycache__/
+*.py[cod]
+
+# PyInstaller
+GestiOne_cmd/build/
+GestiOne_cmd/dist/
+*.spec
+
+# VSCode (opcional)
+.vscode/
+
+# Archivos basura de sistema
+.DS_Store
+Thumbs.db
