@@ -18,7 +18,7 @@ def pause():
     input("\n🔄 Presiona Enter para continuar...")
 
 # Archivos CSV para almacenar información
-PRODUCTS_FILE = "GestiOne_cmd/products.csv"
+PRODUCTS_FILE = "GestiOne_cmd/old_version/products.csv"
 SALES_FILE = "GestiOne_cmd/sales.csv"
 SETTINGS_FILE = "GestiOne_cmd/settings.txt"
 
