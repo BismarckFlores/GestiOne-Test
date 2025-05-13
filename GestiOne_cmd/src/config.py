@@ -1,3 +1,9 @@
+"""
+config.py
+
+Módulo encargado de la configuración inicial del sistema y archivos base.
+"""
+
 import os
 import csv
 import sys
@@ -23,6 +29,7 @@ SETTINGS_FILE = "GestiOne_cmd/storage/settings.txt"
 
 
 def init_files():
+    """Inicializa los archivos de productos, ventas y configuración si no existen."""
     if not os.path.exists(PRODUCTS_FILE):
         with open(PRODUCTS_FILE, mode="w", newline="") as f:
             writer = csv.writer(f)
@@ -42,6 +49,7 @@ def init_files():
 
 
 def get_min_stock_level():
+    """Obtiene el nivel mínimo de stock configurado desde el archivo de configuración."""
     try:
         with open(SETTINGS_FILE, mode="r") as f:
             for line in f:
@@ -52,6 +60,7 @@ def get_min_stock_level():
 
 
 def set_min_stock_level():
+    """Permite establecer un nuevo nivel mínimo de stock ingresado por el usuario."""
     try:
         new_level = int(input("🔧 Nuevo nivel mínimo de stock para alertas: ").strip())
         with open(SETTINGS_FILE, mode="w") as f:
@@ -62,12 +71,14 @@ def set_min_stock_level():
 
 
 def reset_min_stock_level():
+    """Restablece el nivel mínimo de stock al valor predeterminado (10)."""
     with open(SETTINGS_FILE, "w") as f:
         f.write("MIN_STOCK_LEVEL=10\n")
     success_message("Nivel mínimo restablecido a 10.")
 
 
 def reset_data():
+    """Elimina todos los datos de inventario, ventas y restablece configuración."""
     confirmation = input("¿Estás seguro de que quieres borrar todo el inventario y las ventas? (s/n): ").strip().lower()
     if confirmation == "s":
         with open(PRODUCTS_FILE, "w", newline="") as f:

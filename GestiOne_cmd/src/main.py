@@ -1,3 +1,9 @@
+"""
+main.py
+
+Módulo principal que maneja los menús de la aplicación y la interacción con el usuario.
+"""
+
 from utils import clear_console, print_banner, error_message
 from utils import pause
 from config import init_files, set_min_stock_level, reset_data, reset_min_stock_level
@@ -6,6 +12,7 @@ from sales import register_ticket, show_sales, sales_report_by_period, top_selli
 
 
 def inventory_menu():
+    """Muestra el menú de gestión de inventario y gestiona la navegación del usuario."""
     while True:
         clear_console(True)
         print_banner("GESTIÓN DE INVENTARIO")
@@ -39,6 +46,7 @@ def inventory_menu():
 
 
 def sales_menu():
+    """Muestra el menú de gestión de ventas y gestiona la navegación del usuario."""
     while True:
         clear_console(True)
         print_banner("GESTIÓN DE VENTAS")
@@ -68,6 +76,7 @@ def sales_menu():
                 pause()
 
 def advanced_sales_report():
+    """Muestra el menú de reportes avanzados permitiendo filtros por producto o fechas."""
     while True:
         clear_console(True)
         print_banner("REPORTES AVANZADOS")
@@ -87,6 +96,7 @@ def advanced_sales_report():
         pause()
 
 def config_menu():
+    """Muestra el menú de configuración general y permite modificar opciones."""
     while True:
         clear_console(True)
         print_banner("CONFIGURACIÓN")
@@ -111,6 +121,7 @@ def config_menu():
 
 
 def main():
+    """Función principal que inicia la aplicación y muestra el menú principal."""
     init_files()
     while True:
         clear_console(True)

@@ -1,3 +1,9 @@
+"""
+sales.py
+
+Módulo encargado de la gestión de ventas, historial, reportes y estadísticas.
+"""
+
 import csv
 from datetime import datetime, timedelta
 from tabulate import tabulate
@@ -7,6 +13,7 @@ from inventory import save_inventory
 
 
 def register_ticket():
+    """Registra una nueva venta, actualiza inventario y guarda la información en el archivo de ventas."""
     headers, rows = read_csv(PRODUCTS_FILE)
     products = {row[0]: row for row in rows}
 
@@ -77,6 +84,7 @@ def register_ticket():
 
 
 def show_sales():
+    """Muestra el historial completo de ventas agrupado por tickets."""
     clear_console()
     headers, sales = read_csv(SALES_FILE)
 
@@ -117,6 +125,7 @@ def show_sales():
 
 
 def sales_report_by_period():
+    """Genera un reporte de ventas filtrado por periodo: diario, semanal o mensual."""
     period_options = {"diario": "daily", "semanal": "weekly", "mensual": "monthly"}
     period = input("Seleccione el periodo (diario, semanal, mensual): ").strip().lower()
 
@@ -165,6 +174,7 @@ def sales_report_by_period():
 
 
 def top_selling_products():
+    """Muestra el top 5 de productos más vendidos."""
     headers, sales = read_csv(SALES_FILE)
 
     if not sales:
@@ -190,6 +200,7 @@ def top_selling_products():
 
 
 def filter_sales_by_product():
+    """Filtra las ventas realizadas de un producto específico por su ID."""
     product_id = input("Ingrese el ID del producto a consultar: ").strip()
 
     headers, data = read_csv(SALES_FILE)
@@ -215,6 +226,7 @@ def filter_sales_by_product():
 
 
 def filter_sales_by_date_range():
+    """Filtra las ventas dentro de un rango de fechas especificado."""
     try:
         date_start = input("Ingrese la fecha inicial (YYYY-MM-DD): ").strip()
         date_end = input("Ingrese la fecha final (YYYY-MM-DD): ").strip()

@@ -1,3 +1,9 @@
+"""
+inventory.py
+
+Módulo encargado de la gestión de inventario de productos.
+"""
+
 import csv
 from tabulate import tabulate
 from config import PRODUCTS_FILE, get_min_stock_level
@@ -5,6 +11,7 @@ from utils import clear_console, pause, success_message, error_message, read_csv
 
 
 def show_inventory():
+    """Muestra el inventario actual en consola de manera tabulada."""
     clear_console()
     headers, products = read_csv(PRODUCTS_FILE)
 
@@ -17,12 +24,19 @@ def show_inventory():
 
 
 def save_inventory(products):
+    """
+    Guarda el inventario en el archivo CSV ordenado por ID.
+
+    Args:
+        products (dict): Diccionario de productos con sus datos.
+    """
     sorted_products = sorted(products.values(), key=lambda p: int(p[0]))
     write_csv(PRODUCTS_FILE, ["ID", "Name", "Price", "Quantity"], sorted_products)
     success_message("Inventario actualizado correctamente.")
 
 
 def add_product():
+    """Agrega un nuevo producto al inventario validando ID único, nombre, precio y cantidad."""
     headers, rows = read_csv(PRODUCTS_FILE)
     products = {row[0]: row for row in rows}
 
@@ -51,6 +65,7 @@ def add_product():
 
 
 def edit_product():
+    """Edita los datos de un producto existente en el inventario."""
     headers, rows = read_csv(PRODUCTS_FILE)
     products = {row[0]: row for row in rows}
 
@@ -84,6 +99,7 @@ def edit_product():
 
 
 def remove_product():
+    """Elimina un producto del inventario según el ID proporcionado."""
     headers, products = read_csv(PRODUCTS_FILE)
 
     show_inventory()
@@ -100,6 +116,7 @@ def remove_product():
 
 
 def restock_product():
+    """Agrega stock adicional a un producto existente en el inventario."""
     headers, rows = read_csv(PRODUCTS_FILE)
     products = {row[0]: row for row in rows}
 
@@ -138,6 +155,13 @@ def restock_product():
 
 
 def check_low_stock(products=None, headers=None):
+    """
+    Muestra productos con stock por debajo del nivel mínimo configurado.
+
+    Args:
+        products (dict or list, optional): Productos a evaluar.
+        headers (list, optional): Encabezados de las columnas.
+    """
     min_stock_level = get_min_stock_level()
     low_stock_products = []
 
