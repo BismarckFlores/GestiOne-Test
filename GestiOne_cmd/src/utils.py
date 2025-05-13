@@ -29,7 +29,10 @@ def success_message(message):
 def error_message(message):
     print(Fore.RED + f"❌ {message}\n")
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 711d7f2605a89b6fcd5611344707e44836f9d5ae
 def read_csv(file_path):
     """Lee un CSV completo y devuelve headers y datos."""
     with open(file_path, mode="r", newline="", encoding="utf-8") as f:
@@ -38,7 +41,10 @@ def read_csv(file_path):
         data = list(reader)
     return headers, data
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 711d7f2605a89b6fcd5611344707e44836f9d5ae
 def write_csv(file_path, headers, data):
     """Escribe un CSV completo con headers y datos."""
     with open(file_path, mode="w", newline="", encoding="utf-8") as f:
@@ -46,7 +52,10 @@ def write_csv(file_path, headers, data):
         writer.writerow(headers)
         writer.writerows(data)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 711d7f2605a89b6fcd5611344707e44836f9d5ae
 def append_csv(file_path, rows):
     """Agrega filas a un CSV existente."""
     with open(file_path, mode="a", newline="", encoding="utf-8") as f:
