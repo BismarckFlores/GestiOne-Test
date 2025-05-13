@@ -1,6 +1,21 @@
 import os
 import csv
+import sys
 from utils import success_message, error_message
+
+# Esto es para hacerlo ejecutable, si solo lo desea runear en el editor de codigo no dejalo como comentario
+# def base_path():
+#     if getattr(sys, 'frozen', False):
+#         path = os.path.dirname(sys.executable)
+#     else:
+#         path = os.path.dirname(os.path.abspath(__file__))
+
+#     os.makedirs(os.path.join(path, "storage"), exist_ok=True)
+#     return path
+
+# PRODUCTS_FILE = os.path.join(base_path(), "storage", "products.csv")
+# SALES_FILE = os.path.join(base_path(), "storage", "sales.csv")
+# SETTINGS_FILE = os.path.join(base_path(), "storage", "settings.txt")
 
 PRODUCTS_FILE = "GestiOne_cmd/storage/products.csv"
 SALES_FILE = "GestiOne_cmd/storage/sales.csv"

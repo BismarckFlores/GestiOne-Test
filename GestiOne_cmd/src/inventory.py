@@ -1,39 +1,30 @@
 import csv
 from tabulate import tabulate
 from config import PRODUCTS_FILE, get_min_stock_level
-from utils import clear_console, pause, success_message, error_message
+from utils import clear_console, pause, success_message, error_message, read_csv, write_csv
 
 
 def show_inventory():
     clear_console()
-    with open(PRODUCTS_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-        products = list(reader)
+    headers, products = read_csv(PRODUCTS_FILE)
 
-        if not products:
-            error_message("Inventario vacío.")
-        else:
-            print("\n📦 INVENTARIO")
-            print(tabulate(products, headers=headers, tablefmt="fancy_grid"))
+    if not products:
+        error_message("Inventario vacío.")
+    else:
+        print("\n📦 INVENTARIO")
+        print(tabulate(products, headers=headers, tablefmt="fancy_grid"))
     pause()
 
 
 def save_inventory(products):
     sorted_products = sorted(products.values(), key=lambda p: int(p[0]))
-    with open(PRODUCTS_FILE, mode="w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["ID", "Name", "Price", "Quantity"])
-        writer.writerows(sorted_products)
+    write_csv(PRODUCTS_FILE, ["ID", "Name", "Price", "Quantity"], sorted_products)
     success_message("Inventario actualizado correctamente.")
-    # pause()
 
 
 def add_product():
-    with open(PRODUCTS_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        next(reader)
-        products = {row[0]: row for row in reader}
+    headers, rows = read_csv(PRODUCTS_FILE)
+    products = {row[0]: row for row in rows}
 
     while True:
         id_product = input("Product ID: ").strip()
@@ -60,10 +51,8 @@ def add_product():
 
 
 def edit_product():
-    with open(PRODUCTS_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        next(reader)
-        products = {row[0]: row for row in reader}
+    headers, rows = read_csv(PRODUCTS_FILE)
+    products = {row[0]: row for row in rows}
 
     show_inventory()
     product_id = input("\nID del producto a editar: ").strip()
@@ -93,11 +82,9 @@ def edit_product():
     save_inventory(products)
     pause()
 
+
 def remove_product():
-    with open(PRODUCTS_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        next(reader)
-        products = list(reader)
+    headers, products = read_csv(PRODUCTS_FILE)
 
     show_inventory()
     id_product = input("ID del producto a eliminar: ").strip()
@@ -113,16 +100,13 @@ def remove_product():
 
 
 def restock_product():
-    with open(PRODUCTS_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-        products = {row[0]: row for row in reader}
+    headers, rows = read_csv(PRODUCTS_FILE)
+    products = {row[0]: row for row in rows}
 
     print("\n📦 INVENTARIO COMPLETO")
     print(tabulate(products.values(), headers=headers, tablefmt="fancy_grid"))
 
-    # Espera a que el usuario vea el inventario y presione enter
-    pause()  # <-- Añade una pausa para que vea la tabla
+    pause()
 
     # Luego muestra productos con bajo stock si los hay
     check_low_stock(products, headers)
@@ -158,10 +142,7 @@ def check_low_stock(products=None, headers=None):
     low_stock_products = []
 
     if products is None:
-        with open(PRODUCTS_FILE, mode="r") as f:
-            reader = csv.reader(f)
-            headers = next(reader)
-            products = list(reader)
+        headers, products = read_csv(PRODUCTS_FILE)
     elif isinstance(products, dict):
         products = list(products.values())
 

@@ -1,4 +1,5 @@
 import os
+import csv
 from colorama import Fore, Style, init
 
 # Inicializa colorama
@@ -22,3 +23,25 @@ def success_message(message):
 
 def error_message(message):
     print(Fore.RED + f"❌ {message}\n")
+
+def read_csv(file_path):
+    """Lee un CSV completo y devuelve headers y datos."""
+    with open(file_path, mode="r", newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        headers = next(reader)
+        data = list(reader)
+    return headers, data
+
+def write_csv(file_path, headers, data):
+    """Escribe un CSV completo con headers y datos."""
+    with open(file_path, mode="w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+        writer.writerows(data)
+
+def append_csv(file_path, rows):
+    """Agrega filas a un CSV existente."""
+    with open(file_path, mode="a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        for row in rows:
+            writer.writerow(row)
