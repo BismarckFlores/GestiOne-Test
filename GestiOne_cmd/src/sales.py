@@ -2,15 +2,13 @@ import csv
 from datetime import datetime, timedelta
 from tabulate import tabulate
 from config import PRODUCTS_FILE, SALES_FILE
-from utils import clear_console, pause, success_message, error_message
+from utils import clear_console, pause, success_message, error_message, read_csv, write_csv, append_csv
 from inventory import save_inventory
 
 
 def register_ticket():
-    with open(PRODUCTS_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-        products = {row[0]: row for row in reader}
+    headers, rows = read_csv(PRODUCTS_FILE)
+    products = {row[0]: row for row in rows}
 
     ticket = {}
     total_ticket = 0
@@ -66,19 +64,13 @@ def register_ticket():
     save_inventory(products)
 
     try:
-        with open(SALES_FILE, mode="r") as f:
-            reader = csv.reader(f)
-            next(reader)
-            sales = list(reader)
-            sale_id = int(sales[-1][0]) + 1 if sales else 1
+        headers, sales = read_csv(SALES_FILE)
+        sale_id = int(sales[-1][0]) + 1 if sales else 1
     except FileNotFoundError:
         sale_id = 1
 
-    with open(SALES_FILE, mode="a", newline="") as f:
-        writer = csv.writer(f)
-        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        for pid, details in ticket.items():
-            writer.writerow([sale_id, pid, details["name"], details["quantity"], details["subtotal"], date])
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    append_csv(SALES_FILE, [[sale_id, pid, details["name"], details["quantity"], details["subtotal"], date] for pid, details in ticket.items()])
 
     success_message(f"Ticket registrado correctamente. Total: ${total_ticket:.2f}")
     pause()
@@ -86,10 +78,7 @@ def register_ticket():
 
 def show_sales():
     clear_console()
-    with open(SALES_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-        sales = list(reader)
+    headers, sales = read_csv(SALES_FILE)
 
     if not sales:
         error_message("No hay ventas registradas.")
@@ -137,10 +126,7 @@ def sales_report_by_period():
         return
 
     period_eng = period_options[period]
-    with open(SALES_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-        sales = list(reader)
+    headers, sales = read_csv(SALES_FILE)
 
     if not sales:
         error_message("No hay ventas registradas.")
@@ -151,8 +137,8 @@ def sales_report_by_period():
     for sale in sales:
         sale_date = datetime.strptime(sale[-1], "%Y-%m-%d %H:%M:%S")
         if (period_eng == "daily" and sale_date.date() == now.date()) or \
-           (period_eng == "weekly" and sale_date >= now - timedelta(days=7)) or \
-           (period_eng == "monthly" and sale_date.month == now.month and sale_date.year == now.year):
+            (period_eng == "weekly" and sale_date >= now - timedelta(days=7)) or \
+            (period_eng == "monthly" and sale_date.month == now.month and sale_date.year == now.year):
             filtered_sales.append(sale)
 
     if not filtered_sales:
@@ -179,10 +165,7 @@ def sales_report_by_period():
 
 
 def top_selling_products():
-    with open(SALES_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        next(reader)
-        sales = list(reader)
+    headers, sales = read_csv(SALES_FILE)
 
     if not sales:
         error_message("No hay ventas registradas.")
@@ -205,13 +188,12 @@ def top_selling_products():
     ))
     pause()
 
+
 def filter_sales_by_product():
     product_id = input("Ingrese el ID del producto a consultar: ").strip()
 
-    with open(SALES_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-        sales = [sale for sale in reader if sale[1] == product_id]
+    headers, data = read_csv(SALES_FILE)
+    sales = [sale for sale in data if sale[1] == product_id]
 
     if not sales:
         error_message("No hay ventas registradas para ese producto.")
@@ -242,10 +224,7 @@ def filter_sales_by_date_range():
         error_message("Formato de fecha inválido.")
         return
 
-    with open(SALES_FILE, mode="r") as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-        sales = list(reader)
+    headers, sales = read_csv(SALES_FILE)
 
     filtered = []
     for sale in sales:

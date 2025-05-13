@@ -68,20 +68,23 @@ def sales_menu():
                 pause()
 
 def advanced_sales_report():
-    clear_console(True)
-    print_banner("REPORTES AVANZADOS")
-    print("1. Filtrar por ID de Producto")
-    print("2. Filtrar por Rango de Fechas")
-    print("3. Volver")
+    while True:
+        clear_console(True)
+        print_banner("REPORTES AVANZADOS")
+        print("1. Filtrar por ID de Producto")
+        print("2. Filtrar por Rango de Fechas")
+        print("3. Volver")
 
-    option = input("\nSeleccione una opción: ").strip()
-    if option == "1":
-        filter_sales_by_product()
-    elif option == "2":
-        filter_sales_by_date_range()
-    else:
-        return
-    pause()
+        option = input("\nSeleccione una opción: ").strip()
+        if option == "1":
+            filter_sales_by_product()
+        elif option == "2":
+            filter_sales_by_date_range()
+        elif option == "3":
+            return
+        else:
+            error_message("Opción inválida. Intente de nuevo.")
+        pause()
 
 def config_menu():
     while True:

@@ -1,10 +1,26 @@
 import os
 import csv
+import sys
 from utils import success_message, error_message
+
+# Esto es para hacerlo ejecutable, si solo lo desea runear en el editor de codigo no dejalo como comentario
+# def base_path():
+#     if getattr(sys, 'frozen', False):
+#         path = os.path.dirname(sys.executable)
+#     else:
+#         path = os.path.dirname(os.path.abspath(__file__))
+
+#     os.makedirs(os.path.join(path, "storage"), exist_ok=True)
+#     return path
+
+# PRODUCTS_FILE = os.path.join(base_path(), "storage", "products.csv")
+# SALES_FILE = os.path.join(base_path(), "storage", "sales.csv")
+# SETTINGS_FILE = os.path.join(base_path(), "storage", "settings.txt")
 
 PRODUCTS_FILE = "GestiOne_cmd/storage/products.csv"
 SALES_FILE = "GestiOne_cmd/storage/sales.csv"
 SETTINGS_FILE = "GestiOne_cmd/storage/settings.txt"
+
 
 def init_files():
     if not os.path.exists(PRODUCTS_FILE):
@@ -24,6 +40,7 @@ def init_files():
             f.write("MIN_STOCK_LEVEL=10\n")
         success_message("Archivo de configuración creado correctamente.")
 
+
 def get_min_stock_level():
     try:
         with open(SETTINGS_FILE, mode="r") as f:
@@ -32,6 +49,7 @@ def get_min_stock_level():
                     return int(line.split("=")[1].strip())
     except FileNotFoundError:
         return 10
+
 
 def set_min_stock_level():
     try:
@@ -42,10 +60,12 @@ def set_min_stock_level():
     except ValueError:
         error_message("El nivel mínimo de stock debe ser un número.")
 
+
 def reset_min_stock_level():
     with open(SETTINGS_FILE, "w") as f:
         f.write("MIN_STOCK_LEVEL=10\n")
     success_message("Nivel mínimo restablecido a 10.")
+
 
 def reset_data():
     confirmation = input("¿Estás seguro de que quieres borrar todo el inventario y las ventas? (s/n): ").strip().lower()
